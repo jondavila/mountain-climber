@@ -2,6 +2,8 @@
 const game = document.querySelector('#game');
 const ctx = game.getContext('2d');
 
+
+const gravity = 0.5;
 let user;
 let startingPlatform;
 let cloud; // theme of platforms will be clouds (??)
@@ -19,6 +21,8 @@ class Player {
     constructor(x, y, width, height) {
         this.x = x;
         this.y = y;
+        this.dx = 0; // dx represents the change of position along x-axis (delta x with movement right being positive)
+        this.dy = gravity; // dy represents the change of position along y-axis (delta y with movement down being positive)
         this.width = width;
         this.height = height;
         this.alive = true;
@@ -60,11 +64,13 @@ document.addEventListener('keydown', movementHandler);
 
 function gameLoop() {
     ctx.clearRect(0, 0, game.width, game.height);
+    user.y += user.dy; // this allows us to change the rate at which the user rises/falls
     user.render();
     startingPlatform.render();
+    let hit = detectHit(user,startingPlatform);
 }
 
-
+// Keyboard Logic - horizontal motion
 function movementHandler(e) {
     if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
         if ((user.x - 5) >= 0 ) {
@@ -77,5 +83,34 @@ function movementHandler(e) {
     }
 }
 
+// vertical motion
 
-// if the player moves up in y, the platforms move down in y (opposite of this since down is positive in this frame of reference)
+function bounce() {
+    // will need to connect with hit function
+    // is this even needed? Can we add bounce to if statemnt in detectHit
+}
+
+function detectHit(user, platform) {
+    // we only want to detect hits from above, as we want the users to pass through plaforms from below
+    // todo: set an if statment for dy
+    let hitTest = (
+        user.y + user.height === platform.y
+    );
+
+    if (hitTest) {
+        user.dy = 0;
+    } 
+}
+
+
+
+
+
+// =============================== NOTES ================================================ //
+/*
+BE SURE TO CLEAN AND ORGANIZE CODE BEFORE SUBMITTING
+
+if the player moves up in y, the platforms move down in y (opposite of this since down is positive in this frame of reference)
+
+gravity (or rather the change in y due to gravity) is constant except when bouncing. dy should change to 
+ */
