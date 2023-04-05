@@ -82,7 +82,7 @@ function gameLoop() {
     platforms.forEach((platform) => {
         platform.render();
 
-        let hit = detectHit(user.platform)
+        let hit = detectHit(user,platform)
     })
 
     if ((user.x - 5) <= (0 - user.width)) {
