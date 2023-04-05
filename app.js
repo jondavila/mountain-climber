@@ -10,6 +10,9 @@ let cloud; // theme of platforms will be clouds (??)
 game.setAttribute('height', getComputedStyle(game)['height']);
 game.setAttribute('width', getComputedStyle(game)['width']);
 
+console.log('game width', game.width);
+console.log('game height', game.height);
+
 // Entities
 class Player {
     constructor(x, y, width, height) {
