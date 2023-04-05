@@ -3,7 +3,7 @@ const game = document.querySelector('#game');
 const ctx = game.getContext('2d');
 
 
-const gravity = 0.5;
+const gravity = 2.5;
 let user;
 let startingPlatform;
 let cloud; // theme of platforms will be clouds (??)
@@ -73,32 +73,46 @@ function gameLoop() {
 // Keyboard Logic - horizontal motion
 function movementHandler(e) {
     if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
-        if ((user.x - 5) >= 0 ) {
+        if ((user.x - 5) <= (0 - user.width)) {
+            user.x = game.width - user.width  // this provides a "Pac-Man" effect, where the player appears on the other side when heading off-screen
+        } else {
             user.x -= 5;
         }
     } else if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
-        if ((user.x + 5 <= (game.width - user.width))) {
+        if (user.x + 5 >= game.width) {
+            user.x = 0
+        } else {
             user.x += 5;
         }
     }
+
 }
 
 // vertical motion
 
-function bounce() {
-    // will need to connect with hit function
-    // is this even needed? Can we add bounce to if statemnt in detectHit
-}
+// TODO: find better values to reduce choppiness ================================================ //
+
+function resetGravity() {
+    // gradual change to gravity for a more natural acceleration (reduces choppiness)
+    user.dy = gravity - .5;
+    setTimeout(() => {
+        user.dy = gravity
+    }, 400)
+ }
 
 function detectHit(user, platform) {
     // we only want to detect hits from above, as we want the users to pass through plaforms from below
-    // todo: set an if statment for dy
+    // todo: set an if statment for dy motion
     let hitTest = (
-        user.y + user.height === platform.y
+        user.y + user.height >= platform.y 
     );
 
     if (hitTest) {
-        user.dy = 0;
+        user.dy = -2.7;
+        setTimeout(() => {
+            user.dy = -2.2
+        }, 600)
+        setTimeout(resetGravity, 1000);
     } 
 }
 
@@ -112,5 +126,10 @@ BE SURE TO CLEAN AND ORGANIZE CODE BEFORE SUBMITTING
 
 if the player moves up in y, the platforms move down in y (opposite of this since down is positive in this frame of reference)
 
-gravity (or rather the change in y due to gravity) is constant except when bouncing. dy should change to 
+gravity (or rather the change in y due to gravity) is constant except when bouncing. dy should change to a negative when bounced, and gradually change back to gravity
+    - thinking maybe a while function could work here
+        - delay in a while function?? -> set timeout
+    - we could have a setInterval function to check dy value
+        - if not gravity, add .5 for instance
+        - clearInterval when value is reached 
  */
