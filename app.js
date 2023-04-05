@@ -40,7 +40,7 @@ class Platform {
     constructor(x, y) {
         this.x = x;
         this.y = y;
-        this.width = 100;
+        this.width = 500;
         this.height = 10;
 
         this.render = () => {
@@ -58,7 +58,7 @@ class Platform {
 window.addEventListener('DOMContentLoaded', function () {
     // starting position
     user = new Player(200, 200, 20, 20);
-    startingPlatform = new Platform((user.x - 10), (user.y + 30)); // starting platform should be placed under player to avoid instant loss
+    startingPlatform = new Platform((user.x - 90), (user.y + 30)); // starting platform should be placed under player to avoid instant loss
 
     // run the game loop
     const runGame = setInterval(gameLoop, 30);
@@ -84,6 +84,14 @@ function gameLoop() {
     for (let i = 0; i < platforms.length; i++) {
         platforms[i].render();
     }
+
+    if ((user.x - 5) <= (0 - user.width)) {
+        user.x = game.width - user.width  // this provides a "Pac-Man" effect, where the player appears on the other side when heading off-screen
+    }
+    if (user.x + 5 >= game.width) {
+        user.x = 0
+    }
+
 }
 //=============================== GAME PROCESSES ===============================//
 
@@ -95,14 +103,8 @@ function gameLoop() {
 function movementHandler(e) {
     if (e.key === 'ArrowLeft' || e.code === 'KeyA') {
         user.dx = -5;
-        if ((user.x - 5) <= (0 - user.width)) {
-            user.x = game.width - user.width  // this provides a "Pac-Man" effect, where the player appears on the other side when heading off-screen
-        }
     } else if (e.key === 'ArrowRight' || e.code === 'KeyD') {
         user.dx = 5;
-        if (user.x + 5 >= game.width) {
-            user.x = 0
-        }
     }
 }
 //================================ KEYBOARD LOGIC ===============================//
