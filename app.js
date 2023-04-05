@@ -1,25 +1,26 @@
-// Global Variables
+// ========================  GLOBAL VARIABLES ============================= //
 const game = document.querySelector('#game');
 const ctx = game.getContext('2d');
-
 
 const gravity = 2.5;
 let user;
 let startingPlatform;
 let startingPlatform1;
 let startingPlatform2
-let cloud; // theme of platforms will be clouds (??)
 const platforms = [];
+// ========================  GLOBAL VARIABLES ============================= //
 
 
-// Set up for canvas rendering
+
+
+//======================= SET UP FOR CANVAS RENDERING =======================//
 game.setAttribute('height', getComputedStyle(game)['height']);
 game.setAttribute('width', getComputedStyle(game)['width']);
+//======================= SET UP FOR CANVAS RENDERING =======================//
 
-console.log('game width', game.width);
-console.log('game height', game.height);
 
-// Entities
+
+//=============================== ENTITIES ===================================//
 class Player {
     constructor(x, y, width, height) {
         this.x = x;
@@ -38,11 +39,11 @@ class Player {
 }
 
 class Platform {
-    constructor(x, y, width, height) {
+    constructor(x, y) {
         this.x = x;
         this.y = y;
-        this.width = width;
-        this.height = height;
+        this.width = 40;
+        this.height = 10;
 
         this.render = () => {
             // ctx.fillStyle = green; // cloud sprite will go here using .drawImage() 
@@ -50,14 +51,18 @@ class Platform {
         }
     }
 }
+//=============================== ENTITIES ===================================//
 
-// EVENT LISTENERS
+
+
+
+//============================= EVENT LISTENERS ===============================//
 window.addEventListener('DOMContentLoaded', function () {
     // starting position
     user = new Player(200, 200, 20, 20);
-    startingPlatform = new Platform((user.x - 10), (user.y + 30), 40, 10); // starting platform should be placed under player to avoid instant loss
-    startingPlatform1 = new Platform(410, (user.y + 30), 40, 10);
-    startingPlatform2 = new Platform(10, (user.y + 30), 40, 10);
+    startingPlatform = new Platform((user.x - 10), (user.y + 30)); // starting platform should be placed under player to avoid instant loss
+    startingPlatform1 = new Platform(410, (user.y + 30));
+    startingPlatform2 = new Platform(10, (user.y + 30));
     user.render();
     startingPlatform.render();
 
@@ -66,7 +71,12 @@ window.addEventListener('DOMContentLoaded', function () {
 });
 
 document.addEventListener('keydown', movementHandler);
+//============================= EVENT LISTENERS ===============================//
 
+
+
+
+//=============================== GAME PROCESSES ===============================//
 function gameLoop() {
     ctx.clearRect(0, 0, game.width, game.height);
     user.y += user.dy; // this allows us to change the rate at which the user rises/falls
@@ -76,9 +86,18 @@ function gameLoop() {
     startingPlatform2.render();
 
     let hit = detectHit(user, startingPlatform);
-}
 
-// Keyboard Logic - horizontal motion
+    for (let i = 0; i < platforms.length; i++) {
+        platforms[i].render();
+    }
+}
+//=============================== GAME PROCESSES ===============================//
+
+
+
+
+//================================ KEYBOARD LOGIC ===============================//
+// This handles horizontal motion
 function movementHandler(e) {
     if (e.key === 'ArrowLeft' || e.code === 'KeyA') {
         if ((user.x - 5) <= (0 - user.width)) {
@@ -95,19 +114,14 @@ function movementHandler(e) {
     }
 
 }
+//================================ KEYBOARD LOGIC ===============================//
 
-// vertical motion
 
+
+
+//================================= HIT DETECTION ===============================//
+// This mainly handles vertical motion
 // TODO: find better values to reduce choppiness ================================================ //
-
-function resetGravity() {
-    // gradual change to gravity for a more natural acceleration (reduces choppiness)
-    user.dy = gravity - .5;
-    setTimeout(() => {
-        user.dy = gravity
-    }, 400)
-}
-
 function detectHit(user, platform) {
     // we only want to detect hits from above, as we want the users to pass through plaforms from below
     // TODO: set an if statment for dy motion ===============================================================//
@@ -128,9 +142,36 @@ function detectHit(user, platform) {
         setTimeout(resetGravity, 1000);
     }
 }
+//================================= HIT DETECTION ===================================================//
 
 
-console.log(platforms[1]);
+
+
+
+//================================= HELPER FUNCTIONS ===============================================//
+function resetGravity() {
+    // gradual change to gravity for a more natural acceleration (reduces choppiness)
+    user.dy = gravity - .5;
+    setTimeout(() => {
+        user.dy = gravity
+    }, 400)
+}
+
+let randNum = Math.round(Math.random() * 5);
+function createPlatforms () {
+    for (let i = 0; i < randNum; i++) {
+        let randX = Math.floor(Math.random() * game.width);
+        let plat = new Platform(randX, 15);
+        platforms.push(plat);
+    }
+}
+createPlatforms();
+console.log('platforms', platforms);
+//================================= HELPER FUNCTIONS ===============================================//
+
+
+
+
 
 
 
