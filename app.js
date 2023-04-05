@@ -2,11 +2,9 @@
 const game = document.querySelector('#game');
 const ctx = game.getContext('2d');
 
-const gravity = 2.5;
+const gravity = 0.5; // (acceleration) higher number leads to stronger 'gravity'
 let user;
 let startingPlatform;
-let startingPlatform1;
-let startingPlatform2
 const platforms = [];
 // ========================  GLOBAL VARIABLES ============================= //
 
@@ -25,8 +23,8 @@ class Player {
     constructor(x, y, width, height) {
         this.x = x;
         this.y = y;
-        this.dx = 0; // dx represents the change of position along x-axis (delta x with movement right being positive)
-        this.dy = gravity; // dy represents the change of position along y-axis (delta y with movement down being positive)
+        this.dx = 0; // dx (velocity) represents the change of position along x-axis (delta x with movement right being positive)
+        this.dy = gravity; // dy (velocity) represents the change of position along y-axis (delta y with movement down being positive)
         this.width = width;
         this.height = height;
         this.alive = true;
@@ -42,7 +40,7 @@ class Platform {
     constructor(x, y) {
         this.x = x;
         this.y = y;
-        this.width = 40;
+        this.width = 100;
         this.height = 10;
 
         this.render = () => {
@@ -61,10 +59,6 @@ window.addEventListener('DOMContentLoaded', function () {
     // starting position
     user = new Player(200, 200, 20, 20);
     startingPlatform = new Platform((user.x - 10), (user.y + 30)); // starting platform should be placed under player to avoid instant loss
-    startingPlatform1 = new Platform(410, (user.y + 30));
-    startingPlatform2 = new Platform(10, (user.y + 30));
-    user.render();
-    startingPlatform.render();
 
     // run the game loop
     const runGame = setInterval(gameLoop, 30);
@@ -79,11 +73,10 @@ document.addEventListener('keydown', movementHandler);
 //=============================== GAME PROCESSES ===============================//
 function gameLoop() {
     ctx.clearRect(0, 0, game.width, game.height);
-    user.y += user.dy; // this allows us to change the rate at which the user rises/falls
+    user.dy += gravity; // this allows us to change the rate at which the user rises/falls
+    user.y += user.dy;
     user.render();
     startingPlatform.render();
-    startingPlatform1.render();
-    startingPlatform2.render();
 
     let hit = detectHit(user, startingPlatform);
 
@@ -100,20 +93,22 @@ function gameLoop() {
 // This handles horizontal motion
 function movementHandler(e) {
     if (e.key === 'ArrowLeft' || e.code === 'KeyA') {
+        user.dx = -1;
         if ((user.x - 5) <= (0 - user.width)) {
             user.x = game.width - user.width  // this provides a "Pac-Man" effect, where the player appears on the other side when heading off-screen
         } else {
             user.x -= 5;
         }
     } else if (e.key === 'ArrowRight' || e.code === 'KeyD') {
+        user.dx = 1;
         if (user.x + 5 >= game.width) {
             user.x = 0
         } else {
             user.x += 5;
         }
     }
-
 }
+
 //================================ KEYBOARD LOGIC ===============================//
 
 
@@ -124,7 +119,6 @@ function movementHandler(e) {
 // TODO: find better values to reduce choppiness ================================================ //
 function detectHit(user, platform) {
     // we only want to detect hits from above, as we want the users to pass through plaforms from below
-    // TODO: set an if statment for dy motion ===============================================================//
     // TODO: apply to all platforms =========================================================================//
 
     let hitTest = (
@@ -133,13 +127,9 @@ function detectHit(user, platform) {
         user.x + user.width > platform.x &&
         user.x < platform.x + platform.width
     );
-
+     
     if (hitTest) {
-        user.dy = -2.7;
-        setTimeout(() => {
-            user.dy = -2.2
-        }, 600)
-        setTimeout(resetGravity, 1000);
+        user.dy = -12
     }
 }
 //================================= HIT DETECTION ===================================================//
@@ -149,24 +139,14 @@ function detectHit(user, platform) {
 
 
 //================================= HELPER FUNCTIONS ===============================================//
-function resetGravity() {
-    // gradual change to gravity for a more natural acceleration (reduces choppiness)
-    user.dy = gravity - .5;
-    setTimeout(() => {
-        user.dy = gravity
-    }, 400)
-}
-
-let randNum = Math.round(Math.random() * 5);
-function createPlatforms () {
+function createPlatforms (height) {
+    let randNum = Math.round(Math.random() * 5);
     for (let i = 0; i < randNum; i++) {
         let randX = Math.floor(Math.random() * game.width);
-        let plat = new Platform(randX, 15);
+        let plat = new Platform(randX, height);
         platforms.push(plat);
     }
 }
-createPlatforms();
-console.log('platforms', platforms);
 //================================= HELPER FUNCTIONS ===============================================//
 
 
