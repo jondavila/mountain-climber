@@ -6,7 +6,10 @@ const ctx = game.getContext('2d');
 const gravity = 2.5;
 let user;
 let startingPlatform;
+let startingPlatform1;
+let startingPlatform2
 let cloud; // theme of platforms will be clouds (??)
+const platforms = [];
 
 
 // Set up for canvas rendering
@@ -52,7 +55,9 @@ class Platform {
 window.addEventListener('DOMContentLoaded', function () {
     // starting position
     user = new Player(200, 200, 20, 20);
-    startingPlatform = new Platform((user.x-10), (user.y+30), 40, 10); // starting platform should be placed under player to avoid instant loss
+    startingPlatform = new Platform((user.x - 10), (user.y + 30), 40, 10); // starting platform should be placed under player to avoid instant loss
+    startingPlatform1 = new Platform(410, (user.y + 30), 40, 10);
+    startingPlatform2 = new Platform(10, (user.y + 30), 40, 10);
     user.render();
     startingPlatform.render();
 
@@ -67,18 +72,21 @@ function gameLoop() {
     user.y += user.dy; // this allows us to change the rate at which the user rises/falls
     user.render();
     startingPlatform.render();
-    let hit = detectHit(user,startingPlatform);
+    startingPlatform1.render();
+    startingPlatform2.render();
+
+    let hit = detectHit(user, startingPlatform);
 }
 
 // Keyboard Logic - horizontal motion
 function movementHandler(e) {
-    if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
+    if (e.key === 'ArrowLeft' || e.code === 'KeyA') {
         if ((user.x - 5) <= (0 - user.width)) {
             user.x = game.width - user.width  // this provides a "Pac-Man" effect, where the player appears on the other side when heading off-screen
         } else {
             user.x -= 5;
         }
-    } else if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
+    } else if (e.key === 'ArrowRight' || e.code === 'KeyD') {
         if (user.x + 5 >= game.width) {
             user.x = 0
         } else {
@@ -98,13 +106,18 @@ function resetGravity() {
     setTimeout(() => {
         user.dy = gravity
     }, 400)
- }
+}
 
 function detectHit(user, platform) {
     // we only want to detect hits from above, as we want the users to pass through plaforms from below
-    // todo: set an if statment for dy motion
+    // TODO: set an if statment for dy motion ===============================================================//
+    // TODO: apply to all platforms =========================================================================//
+
     let hitTest = (
-        user.y + user.height >= platform.y 
+        user.y + user.height > platform.y &&
+        user.y < platform.y + platform.height &&
+        user.x + user.width > platform.x &&
+        user.x < platform.x + platform.width
     );
 
     if (hitTest) {
@@ -113,10 +126,11 @@ function detectHit(user, platform) {
             user.dy = -2.2
         }, 600)
         setTimeout(resetGravity, 1000);
-    } 
+    }
 }
 
 
+console.log(platforms[1]);
 
 
 
