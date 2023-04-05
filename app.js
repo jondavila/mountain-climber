@@ -40,7 +40,7 @@ class Platform {
     constructor(x, y) {
         this.x = x;
         this.y = y;
-        this.width = 500;
+        this.width = 500; //CHANGED TO MAKE TESTING EASIER
         this.height = 10;
 
         this.render = () => {
@@ -59,6 +59,7 @@ window.addEventListener('DOMContentLoaded', function () {
     // starting position
     user = new Player(200, 200, 20, 20);
     startingPlatform = new Platform((user.x - 90), (user.y + 30)); // starting platform should be placed under player to avoid instant loss
+    platforms.push(startingPlatform);
 
     // run the game loop
     const runGame = setInterval(gameLoop, 30);
@@ -75,15 +76,14 @@ function gameLoop() {
     ctx.clearRect(0, 0, game.width, game.height);
     user.dy += gravity; // this allows us to change the rate at which the user rises/falls
     user.y += user.dy;
-    user.x += user.dx
+    user.x += user.dx // changed to positive or negative value depending on keypress
     user.render();
-    startingPlatform.render();
 
-    let hit = detectHit(user, startingPlatform);
+    platforms.forEach((platform) => {
+        platform.render();
 
-    for (let i = 0; i < platforms.length; i++) {
-        platforms[i].render();
-    }
+        let hit = detectHit(user.platform)
+    })
 
     if ((user.x - 5) <= (0 - user.width)) {
         user.x = game.width - user.width  // this provides a "Pac-Man" effect, where the player appears on the other side when heading off-screen
@@ -91,7 +91,6 @@ function gameLoop() {
     if (user.x + 5 >= game.width) {
         user.x = 0
     }
-
 }
 //=============================== GAME PROCESSES ===============================//
 
@@ -125,7 +124,7 @@ function detectHit(user, platform) {
         user.x + user.width > platform.x &&
         user.x < platform.x + platform.width
     );
-     
+
     if (hitTest) {
         user.dy = -12
     }
@@ -134,23 +133,17 @@ function detectHit(user, platform) {
 
 
 
-
-
 //================================= HELPER FUNCTIONS ===============================================//
-function createPlatforms (height) {
-    let randNum = Math.round(Math.random() * 5);
-    for (let i = 0; i < randNum; i++) {
+function createPlatforms(height) {
+    let randNum = Math.floor(Math.random() * 6);
+    for (let i = 0; i < 1; i++) {
         let randX = Math.floor(Math.random() * game.width);
-        let plat = new Platform(randX, height);
+        let plat = new Platform(110, height);
         platforms.push(plat);
     }
 }
+createPlatforms(100);
 //================================= HELPER FUNCTIONS ===============================================//
-
-
-
-
-
 
 
 // =============================== NOTES ================================================ //
