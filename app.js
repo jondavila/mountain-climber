@@ -75,6 +75,7 @@ function gameLoop() {
     ctx.clearRect(0, 0, game.width, game.height);
     user.dy += gravity; // this allows us to change the rate at which the user rises/falls
     user.y += user.dy;
+    user.x += user.dx
     user.render();
     startingPlatform.render();
 
@@ -93,22 +94,17 @@ function gameLoop() {
 // This handles horizontal motion
 function movementHandler(e) {
     if (e.key === 'ArrowLeft' || e.code === 'KeyA') {
-        user.dx = -1;
+        user.dx = -5;
         if ((user.x - 5) <= (0 - user.width)) {
             user.x = game.width - user.width  // this provides a "Pac-Man" effect, where the player appears on the other side when heading off-screen
-        } else {
-            user.x -= 5;
         }
     } else if (e.key === 'ArrowRight' || e.code === 'KeyD') {
-        user.dx = 1;
+        user.dx = 5;
         if (user.x + 5 >= game.width) {
             user.x = 0
-        } else {
-            user.x += 5;
         }
     }
 }
-
 //================================ KEYBOARD LOGIC ===============================//
 
 
