@@ -60,6 +60,8 @@ window.addEventListener('DOMContentLoaded', function () {
     user = new Player(200, 200, 20, 20);
     startingPlatform = new Platform((user.x - 90), (user.y + 30)); // starting platform should be placed under player to avoid instant loss
     platforms.push(startingPlatform);
+    createPlatforms(randX,100);
+
 
     // run the game loop
     const runGame = setInterval(gameLoop, 30);
@@ -74,23 +76,26 @@ document.addEventListener('keydown', movementHandler);
 //=============================== GAME PROCESSES ===============================//
 function gameLoop() {
     ctx.clearRect(0, 0, game.width, game.height);
-    user.dy += gravity; // this allows us to change the rate at which the user rises/falls
-    user.y += user.dy;
-    user.x += user.dx // changed to positive or negative value depending on keypress
-    user.render();
+    positionUpdate(user);
 
     platforms.forEach((platform) => {
         platform.render();
-
         let hit = detectHit(user,platform)
+
+        // as the user reaches the top of the screen, the platforms move down 
+        if (user.y < 80) {
+            platform.y += 2;
+        }
+
+        // if the platform is below game height, the platform is deleted to save space
+        if (platform.y > (game.height)) {
+            let platIndex = platforms.indexOf(platform);
+            platforms.shift();
+        }
     })
 
-    if ((user.x - 5) <= (0 - user.width)) {
-        user.x = game.width - user.width  // this provides a "Pac-Man" effect, where the player appears on the other side when heading off-screen
-    }
-    if (user.x + 5 >= game.width) {
-        user.x = 0
-    }
+    horizontalLoop();
+
 }
 //=============================== GAME PROCESSES ===============================//
 
@@ -116,13 +121,13 @@ function movementHandler(e) {
 // TODO: find better values to reduce choppiness ================================================ //
 function detectHit(user, platform) {
     // we only want to detect hits from above, as we want the users to pass through plaforms from below
-    // TODO: apply to all platforms =========================================================================//
 
     let hitTest = (
-        user.y + user.height > platform.y &&
+        user.y + user.height > platform.y  &&
         user.y < platform.y + platform.height &&
         user.x + user.width > platform.x &&
-        user.x < platform.x + platform.width
+        user.x < platform.x + platform.width &&
+        user.dy > 0
     );
 
     if (hitTest) {
@@ -134,15 +139,29 @@ function detectHit(user, platform) {
 
 
 //================================= HELPER FUNCTIONS ===============================================//
-function createPlatforms(height) {
-    let randNum = Math.floor(Math.random() * 6);
+function positionUpdate(user) {
+    user.dy += gravity; // this allows us to change the rate at which the user rises/falls
+    user.y += user.dy;
+    user.x += user.dx // changed to positive or negative value depending on keypress
+    user.render();
+}
+
+let randX = Math.floor(Math.random() * game.width);
+function createPlatforms(x, y) {
     for (let i = 0; i < 1; i++) {
-        let randX = Math.floor(Math.random() * game.width);
-        let plat = new Platform(110, height);
+        let plat = new Platform(110, y);
         platforms.push(plat);
     }
 }
-createPlatforms(100);
+
+function horizontalLoop() {
+    if ((user.x - 5) <= (0 - user.width)) {
+        user.x = game.width - user.width  // this provides a "Pac-Man" effect, where the player appears on the other side when heading off-screen
+    }
+    if (user.x + 5 >= game.width) {
+        user.x = 0
+    }
+}
 //================================= HELPER FUNCTIONS ===============================================//
 
 
