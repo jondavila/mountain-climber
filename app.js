@@ -65,7 +65,7 @@ window.addEventListener('DOMContentLoaded', function () {
     startingPlatforms(user);
 
     // run the game loop
-    const runGame = setInterval(gameLoop, 30);
+    const runGame = setInterval(gameLoop, 16);
 });
 
 document.addEventListener('keydown', movementHandler);
