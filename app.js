@@ -2,7 +2,7 @@
 const game = document.querySelector('#game');
 const ctx = game.getContext('2d');
 
-const gravity = 0.6; // (acceleration) higher number leads to stronger 'gravity'
+const gravity = 0.5; // (acceleration) higher number leads to stronger 'gravity'
 const platforms = [];
 const score = document.querySelector('#score');
 let user;
@@ -65,7 +65,7 @@ window.addEventListener('DOMContentLoaded', function () {
     startingPlatforms(user);
 
     // run the game loop
-    const runGame = setInterval(gameLoop, 16);
+    const runGame = setInterval(gameLoop, 22);
 });
 
 document.addEventListener('keydown', movementHandler);
@@ -163,20 +163,23 @@ function startingPlatforms(user) {
     createPlatforms(user.y - 90);
     createPlatforms(user.y - 150);
     createPlatforms(user.y - 210);
-    createPlatforms((user.y - 270));
-    createPlatforms((user.y - 310));
-    createPlatforms((user.y - 330));
-    createPlatforms((user.y - 400));
-    createPlatforms((user.y - 430));
+    createPlatforms(user.y - 270);
+    createPlatforms(user.y - 310);
+    createPlatforms(user.y - 330);
+    createPlatforms(user.y - 400);
+    createPlatforms(user.y - 430);
     createPlatforms(user.y - 500);
     createPlatforms(user.y - 550);
-    createPlatforms((user.y - 600));
+    createPlatforms(user.y - 600);
+    createPlatforms(user.y - 660);
+    createPlatforms(user.y - 690);
+    createPlatforms(user.y - 750);
 }
 
 function generateNewPlatforms() {
     let onScreen = platforms.length;
-    if (onScreen < 10) {
-        createPlatforms(65);
+    if (onScreen < 13) {
+        createPlatforms(-10);
     }
 }
 //=================================== PLATFORM GENERATING ============================================//
