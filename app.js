@@ -177,8 +177,6 @@ function generateNewPlatforms() {
     let onScreen = platforms.length;
     if (onScreen < 10) {
         createPlatforms(65);
-        console.log('platforms on screen', onScreen)
-        console.log('platforms', platforms)
     }
 }
 //=================================== PLATFORM GENERATING ============================================//
