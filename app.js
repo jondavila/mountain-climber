@@ -3,9 +3,9 @@ const game = document.querySelector('#game');
 const ctx = game.getContext('2d');
 
 const gravity = 0.5; // (acceleration) higher number leads to stronger 'gravity'
+const platforms = [];
 let user;
 let startingPlatform;
-const platforms = [];
 // ========================  GLOBAL VARIABLES ============================= //
 
 
@@ -28,7 +28,7 @@ class Player {
         this.width = width;
         this.height = height;
         this.alive = true;
-
+        
         this.render = () => {
             ctx.fillStyle = 'black'; // player sprite will go here using .drawImage() => no need for .fillStyle or .fillRect
             ctx.fillRect(this.x, this.y, this.width, this.height);
@@ -40,9 +40,10 @@ class Platform {
     constructor(x, y) {
         this.x = x;
         this.y = y;
-        this.width = 500; //CHANGED TO MAKE TESTING EASIER
+        this.dy = 0;
+        this.width = 40; //CHANGED TO MAKE TESTING EASIER
         this.height = 10;
-
+        
         this.render = () => {
             // ctx.fillStyle = green; // cloud sprite will go here using .drawImage() 
             ctx.fillRect(this.x, this.y, this.width, this.height);
@@ -58,11 +59,20 @@ class Platform {
 window.addEventListener('DOMContentLoaded', function () {
     // starting position
     user = new Player(200, 200, 20, 20);
-    startingPlatform = new Platform((user.x - 90), (user.y + 30)); // starting platform should be placed under player to avoid instant loss
+    startingPlatform = new Platform((user.x - 5), (user.y + 30)); // starting platform should be placed under player to avoid instant loss
     platforms.push(startingPlatform);
-    createPlatforms(randX,100);
-
-
+    createPlatforms(30);
+    // createPlatforms(randX, (user.y - 60));
+    createPlatforms(90);
+    // createPlatforms(randX, (user.y - 120));
+    createPlatforms(150);
+    // createPlatforms(randX, (user.y - 180));
+    createPlatforms(210);
+    // createPlatforms(randX, (user.y - 0));
+    createPlatforms((user.y - 270));
+    // createPlatforms(randX, (user.y - 30));
+    
+    
     // run the game loop
     const runGame = setInterval(gameLoop, 30);
 });
@@ -81,21 +91,26 @@ function gameLoop() {
     platforms.forEach((platform) => {
         platform.render();
         let hit = detectHit(user,platform)
-
+        platform.y += platform.dy;
+        
         // as the user reaches the top of the screen, the platforms move down 
         if (user.y < 80) {
-            platform.y += 2;
+            platform.dy = 6;
+        } else if (user.y > 80) {
+            platform.dy = 0;
         }
-
+        
+        
         // if the platform is below game height, the platform is deleted to save space
         if (platform.y > (game.height)) {
-            let platIndex = platforms.indexOf(platform);
-            platforms.shift();
+            let platformIndex = platforms.indexOf(platform)
+            platforms.splice(platformIndex, 1);
         }
     })
 
-    horizontalLoop();
+    generateNewPlatforms();
 
+    horizontalLoop();
 }
 //=============================== GAME PROCESSES ===============================//
 
@@ -121,20 +136,38 @@ function movementHandler(e) {
 // TODO: find better values to reduce choppiness ================================================ //
 function detectHit(user, platform) {
     // we only want to detect hits from above, as we want the users to pass through plaforms from below
-
+    
     let hitTest = (
         user.y + user.height > platform.y  &&
         user.y < platform.y + platform.height &&
         user.x + user.width > platform.x &&
         user.x < platform.x + platform.width &&
         user.dy > 0
-    );
-
-    if (hitTest) {
-        user.dy = -12
+        );
+        
+        if (hitTest) {
+            user.dy = -12
+        }
+    }
+    //================================= HIT DETECTION ===================================================//
+    
+    
+    //=================================== PLATFORM GENERATING ============================================//
+    function createPlatforms(y) {
+        let randX = Math.floor(Math.random() * game.width);
+        let plat = new Platform(randX, y);
+        platforms.push(plat);
+    }
+    
+    function generateNewPlatforms() {
+    let onScreen = platforms.length;
+    if (onScreen < 6) {
+        createPlatforms(90);
+        console.log('platforms on screen', onScreen)
+        console.log('platforms', platforms)
     }
 }
-//================================= HIT DETECTION ===================================================//
+//=================================== PLATFORM GENERATING ============================================//
 
 
 
@@ -146,13 +179,6 @@ function positionUpdate(user) {
     user.render();
 }
 
-let randX = Math.floor(Math.random() * game.width);
-function createPlatforms(x, y) {
-    for (let i = 0; i < 1; i++) {
-        let plat = new Platform(110, y);
-        platforms.push(plat);
-    }
-}
 
 function horizontalLoop() {
     if ((user.x - 5) <= (0 - user.width)) {
@@ -162,6 +188,8 @@ function horizontalLoop() {
         user.x = 0
     }
 }
+
+
 //================================= HELPER FUNCTIONS ===============================================//
 
 
