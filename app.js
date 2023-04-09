@@ -2,7 +2,7 @@
 const game = document.querySelector('#game');
 const ctx = game.getContext('2d');
 
-const gravity = 0.5; // (acceleration) higher number leads to stronger 'gravity'
+const gravity = 0.55; // (acceleration) higher number leads to stronger 'gravity'
 const platforms = [];
 const score = document.querySelector('#score');
 let user;
@@ -86,7 +86,7 @@ function gameLoop() {
 
         // as the user reaches the top of the screen, the platforms move down 
         if (user.y < 400) {
-            platform.dy = 7;
+            platform.dy = 8;
         } else if (user.y > 80) {
             platform.dy = 0;
         }
@@ -165,24 +165,35 @@ function startingPlatforms(user) {
     createPlatforms(user.y - 210);
     createPlatforms(user.y - 270);
     createPlatforms(user.y - 310);
-    createPlatforms(user.y - 330);
+    createPlatforms(user.y - 350);
     createPlatforms(user.y - 400);
-    createPlatforms(user.y - 430);
+    createPlatforms(user.y - 460);
     createPlatforms(user.y - 500);
     createPlatforms(user.y - 550);
     createPlatforms(user.y - 600);
     createPlatforms(user.y - 660);
     createPlatforms(user.y - 690);
     createPlatforms(user.y - 750);
+    createPlatforms(user.y - 815);
+
 }
 
 function generateNewPlatforms() {
     let onScreen = platforms.length;
-    if (onScreen < 13) {
+    if (onScreen < 11) {
         createPlatforms(-10);
     }
 }
 //=================================== PLATFORM GENERATING ============================================//
+
+
+
+//=================================== PLAYER LOST ====================================================//
+function playerLost() {
+
+}
+
+//=================================== PLAYER LOST ====================================================// 
 
 
 
@@ -225,4 +236,6 @@ gravity (or rather the change in y due to gravity) is constant except when bounc
         - clearInterval when value is reached 
 
 score should be tied to movement of platforms, not user, since user can bounce on the same platform
+
+if user.dx is not greater than 0 (moving down), make that the platform.dx
  */
