@@ -1,10 +1,11 @@
 // ========================  GLOBAL VARIABLES ============================= //
 const game = document.querySelector('#game');
 const ctx = game.getContext('2d');
-
-const gravity = 0.55; // (acceleration) higher number leads to stronger 'gravity'
-const platforms = [];
 const score = document.querySelector('#score');
+const resetButton = document.querySelector('#reset');
+
+const gravity = 0.6; // (acceleration) higher number leads to stronger 'gravity'
+const platforms = [];
 let user;
 let startingPlatform;
 let scoreNum = 0;
@@ -44,7 +45,7 @@ class Platform {
         this.x = x;
         this.y = y;
         this.dy = 0;
-        this.width = 40; //CHANGED TO MAKE TESTING EASIER
+        this.width = 45;
         this.height = 10;
 
         this.render = () => {
@@ -61,7 +62,7 @@ class Platform {
 //============================= EVENT LISTENERS ===============================//
 window.addEventListener('DOMContentLoaded', function () {
     // starting position
-    user = new Player((game.width/2), (game.height - 70), 20, 20);
+    user = new Player((game.width / 2), (game.height - 70), 20, 20);
     startingPlatforms(user);
 
     // run the game loop
@@ -76,37 +77,41 @@ document.addEventListener('keydown', movementHandler);
 
 //=============================== GAME PROCESSES ===============================//
 function gameLoop() {
-    ctx.clearRect(0, 0, game.width, game.height);
-    positionUpdate(user);
+    playerLost();
+    if (user.alive) {
 
-    platforms.forEach((platform) => {
-        platform.render();
-        let hit = detectHit(user, platform)
-        platform.y += platform.dy;
+        ctx.clearRect(0, 0, game.width, game.height);
+        positionUpdate();
 
-        // as the user reaches the top of the screen, the platforms move down 
-        if (user.y < 400) {
-            platform.dy = 8;
-        } else if (user.y > 80) {
-            platform.dy = 0;
-        }
+        platforms.forEach((platform) => {
+            platform.render();
+            detectHit(user, platform)
+            platform.y += platform.dy;
 
-        // if the platform is below game height, the platform is deleted to save space
-        if (platform.y > (game.height)) {
-            let platformIndex = platforms.indexOf(platform)
-            platforms.splice(platformIndex, 1);
-        }
+            // as the user reaches the top of the screen, the platforms move down 
+            if (user.y < 400) {
+                platform.dy = 7;
+            } else if (user.y > 80) {
+                platform.dy = 0;
+            }
 
-        if (platform.dy !== 0) {
-            scoreKeeper();
-        }
+            // if the platform is below game height, the platform is deleted to save space
+            if (platform.y > (game.height)) {
+                let platformIndex = platforms.indexOf(platform)
+                platforms.splice(platformIndex, 1);
+            }
 
-        
-    })
+            if (platform.dy !== 0) {
+                scoreKeeper();
+            }
 
-    generateNewPlatforms();
 
-    horizontalLoop();
+        })
+
+        generateNewPlatforms();
+
+        horizontalLoop();
+    }
 }
 //=============================== GAME PROCESSES ===============================//
 
@@ -150,14 +155,14 @@ function detectHit(user, platform) {
 
 //=================================== PLATFORM GENERATING ============================================//
 function createPlatforms(y) {
-    let randX = Math.floor(Math.random() * (game.width-40));
+    let randX = Math.floor(Math.random() * (game.width - 40));
     let plat = new Platform(randX, y);
     platforms.push(plat);
 }
 
 function startingPlatforms(user) {
     // starting platform should be placed under player to avoid instant loss
-    startingPlatform = new Platform((user.x - 5), (user.y + 30)); 
+    startingPlatform = new Platform((user.x - 5), (user.y + 30));
     platforms.push(startingPlatform);
     createPlatforms(user.y - 30);
     createPlatforms(user.y - 90);
@@ -190,15 +195,25 @@ function generateNewPlatforms() {
 
 //=================================== PLAYER LOST ====================================================//
 function playerLost() {
-
+    if (user.y > game.height) {
+        user.alive = false
+    }
 }
+
+resetButton.addEventListener('click', function() {
+    platforms.splice(0, platforms.length);
+    user = new Player((game.width / 2), (game.height - 70), 20, 20);
+    startingPlatforms(user);
+    scoreNum = 0;
+    score.textContent = 'Score: 0'
+})
 
 //=================================== PLAYER LOST ====================================================// 
 
 
 
 //================================= HELPER FUNCTIONS ===============================================//
-function positionUpdate(user) {
+function positionUpdate() {
     user.dy += gravity; // this allows us to change the rate at which the user rises/falls
     user.y += user.dy;
     user.x += user.dx; // changed to positive or negative value depending on keypress
