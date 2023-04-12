@@ -2,6 +2,7 @@
 const game = document.querySelector('#game');
 const ctx = game.getContext('2d');
 const score = document.querySelector('#score');
+const highScore = document.querySelector('#high-score');
 const resetButton = document.querySelector('#reset');
 
 const gravity = 0.6; // (acceleration) higher number leads to stronger 'gravity'
@@ -9,6 +10,8 @@ const platforms = [];
 let user;
 let startingPlatform;
 let scoreNum = 0;
+let roundedScore;
+let highScoreNum = 0;
 // ========================  GLOBAL VARIABLES ============================= //
 
 
@@ -197,6 +200,10 @@ function generateNewPlatforms() {
 function playerLost() {
     if (user.y > game.height) {
         user.alive = false
+        if(roundedScore > highScoreNum) {
+            highScore.textContent = `High Score: ${roundedScore}`;
+            highScoreNum = roundedScore;
+        }
     }
 }
 
@@ -204,6 +211,8 @@ resetButton.addEventListener('click', function() {
     platforms.splice(0, platforms.length);
     user = new Player((game.width / 2), (game.height - 70), 20, 20);
     startingPlatforms(user);
+
+  
     scoreNum = 0;
     score.textContent = 'Score: 0'
 })
@@ -231,7 +240,7 @@ function horizontalLoop() {
 
 function scoreKeeper() {
     scoreNum += 0.2;
-    const roundedScore = Math.floor(scoreNum)
+    roundedScore = Math.floor(scoreNum)
     score.textContent = `Score: ${roundedScore}`
 }
 //================================= HELPER FUNCTIONS ===============================================//
@@ -253,4 +262,6 @@ gravity (or rather the change in y due to gravity) is constant except when bounc
 score should be tied to movement of platforms, not user, since user can bounce on the same platform
 
 if user.dx is not greater than 0 (moving down), make that the platform.dx
+
+NOTE AS OF 4/11 = SCORE BROKEN
  */
