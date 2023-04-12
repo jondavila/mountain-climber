@@ -56,7 +56,7 @@ class Platform {
         this.height = 10;
 
         this.render = () => {
-            // ctx.fillStyle = green; // cloud sprite will go here using .drawImage() 
+            // ctx.fillStyle = 'white'; // cloud sprite will go here using .drawImage() 
             ctx.fillRect(this.x, this.y, this.width, this.height);
         }
     }
@@ -193,7 +193,7 @@ function startingPlatforms(user) {
 
 function generateNewPlatforms() {
     let onScreen = platforms.length;
-    if (onScreen < 11) {
+    if (onScreen < 12) {
         createPlatforms(-10);
     }
 }
@@ -205,12 +205,12 @@ function generateNewPlatforms() {
 function playerLost() {
     if (user.y > game.height) {
         user.alive = false
+        gameOverText.textContent = `Game Over - Score: ${roundedScore}`;
+        gameOver.classList.remove('hidden');
         if(roundedScore > highScoreNum) {
             highScore.textContent = `High Score: ${roundedScore}`;
             highScoreNum = roundedScore;
         }
-        gameOverText.textContent = `Game Over - Score: ${roundedScore}`;
-        gameOver.classList.remove('hidden');
     }
 }
 
@@ -220,6 +220,7 @@ resetButton.addEventListener('click', function() {
     startingPlatforms(user);
 
     scoreNum = 0;
+    roundedScore = 0;
     score.textContent = 'Score: 0'
 
     gameOver.classList.toggle('hidden');
