@@ -1,31 +1,42 @@
 body {
-    background-color: bisque;
+    background-color: cornflowerblue;
+    background-image: url('https://wikiclipart.com/wp-content/uploads/2016/11/Search-results-search-for-mountains-pictures-graphics-clip-art.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
 }
 
 canvas {
     height: 600px;
-    width: 400px;
-    background-image: url('https://wallpaperaccess.com/full/820675.jpg');
-    background-size: cover;
+    width: 450px;
+    border: 5px solid gray;
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.2);
 }
 
 main {
     display: grid;
     grid-template-rows: 1fr;
-    grid-template-columns: 1fr 400px 1fr;
+    grid-template-columns: 1fr 450px 1fr;
     height: 600px;
 }
 
 header {
     text-align: center;
+    padding: 10px;
+    background-image: url('/images/winter-mountain-clipart-13.png');
 }
 
 button {
     cursor: pointer;
+    background-color: aliceblue;
+    padding: 5px;
+    border: 1px solid gray;
+    border-radius: 5px;
+    font-size: medium;
 }
 
 .game-screen {
-    margin-top: 30px;
+    margin-top: 15px;
 }
 
 .instructions, .game-over {
@@ -34,11 +45,12 @@ button {
     justify-content: center;
     align-items: center;
     position: absolute;
-    top: 50%;
+    top: 40%;
     right: 50%;
     transform: translate(50%, -50%);
-    background-color: blue;
+    background-color: lavender;
     border-radius: 12px;
+    padding: 10px;
 }
 
 .hidden {
