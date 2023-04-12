@@ -8,13 +8,33 @@
     <title>Platform Project</title>
 </head>
 <body>
-    <div>
-        <h2 id="score">Score: 0</h2>
-        <h4 id="high-score">High Score: ---</h4>
+    <header>
+        <h1>
+            Mountain Climber
+        </h1>
+    </header>
+    <div class="game-screen">
         <main>
+            <aside id="left">
+                <h2 id="score">Score: 0</h2>
+                <h4 id="high-score">High Score: ---</h4>
+            </aside>
             <canvas id="game"></canvas>
+            <aside id="right">
+                <div class="instructions">
+                    <h2>Instructions</h2>
+                    <p>Use A/D or the arrow keys to move around</p>
+                    <p>Get to the top! BE CAREFUL! </p>
+                    <p>Once you start moving you can't stop</p>
+                    <button id="play">Play!</button>
+                </div>
+                <div class="game-over hidden">
+                    <h2 id="game-over-text"></h2>
+                    <button id="reset">Restart</button>
+                </div>
+
+            </aside>
         </main>
-        <button id="reset">Reset</button>
     </div>
     <script src="./app.js"></script>
 </body>

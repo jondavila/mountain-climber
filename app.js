@@ -3,14 +3,18 @@ const game = document.querySelector('#game');
 const ctx = game.getContext('2d');
 const score = document.querySelector('#score');
 const highScore = document.querySelector('#high-score');
+const playButton = document.querySelector('#play');
 const resetButton = document.querySelector('#reset');
+const instructions = document.querySelector('.instructions');
+const gameOver = document.querySelector('.game-over');
+const gameOverText = document.querySelector('#game-over-text');
 
-const gravity = 0.6; // (acceleration) higher number leads to stronger 'gravity'
-const platforms = [];
+const gravity = 0.62; // (acceleration) higher number leads to stronger 'gravity'
+let platforms = [];
 let user;
 let startingPlatform;
 let scoreNum = 0;
-let roundedScore;
+let roundedScore = 0;
 let highScoreNum = 0;
 // ========================  GLOBAL VARIABLES ============================= //
 
@@ -69,7 +73,10 @@ window.addEventListener('DOMContentLoaded', function () {
     startingPlatforms(user);
 
     // run the game loop
-    const runGame = setInterval(gameLoop, 22);
+    playButton.addEventListener('click', ()=> {
+        let runGame = setInterval(gameLoop, 22);
+        instructions.classList.toggle('hidden');
+    });
 });
 
 document.addEventListener('keydown', movementHandler);
@@ -164,13 +171,14 @@ function createPlatforms(y) {
 }
 
 function startingPlatforms(user) {
+    let randX = Math.floor(Math.random() * (game.width - 40));
     // starting platform should be placed under player to avoid instant loss
     startingPlatform = new Platform((user.x - 5), (user.y + 30));
     platforms.push(startingPlatform);
     createPlatforms(user.y - 30);
     createPlatforms(user.y - 90);
     createPlatforms(user.y - 150);
-    createPlatforms(user.y - 210);
+    createPlatforms(user.y - 220);
     createPlatforms(user.y - 270);
     createPlatforms(user.y - 310);
     createPlatforms(user.y - 350);
@@ -180,9 +188,6 @@ function startingPlatforms(user) {
     createPlatforms(user.y - 550);
     createPlatforms(user.y - 600);
     createPlatforms(user.y - 660);
-    createPlatforms(user.y - 690);
-    createPlatforms(user.y - 750);
-    createPlatforms(user.y - 815);
 
 }
 
@@ -204,17 +209,20 @@ function playerLost() {
             highScore.textContent = `High Score: ${roundedScore}`;
             highScoreNum = roundedScore;
         }
+        gameOverText.textContent = `Game Over - Score: ${roundedScore}`;
+        gameOver.classList.remove('hidden');
     }
 }
 
 resetButton.addEventListener('click', function() {
-    platforms.splice(0, platforms.length);
+    platforms = [];
     user = new Player((game.width / 2), (game.height - 70), 20, 20);
     startingPlatforms(user);
 
-  
     scoreNum = 0;
     score.textContent = 'Score: 0'
+
+    gameOver.classList.toggle('hidden');
 })
 
 //=================================== PLAYER LOST ====================================================// 

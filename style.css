@@ -1,7 +1,54 @@
+body {
+    background-color: bisque;
+}
 
 canvas {
     height: 600px;
-    width: 300px; 
+    width: 400px;
     background-image: url('https://wallpaperaccess.com/full/820675.jpg');
     background-size: cover;
+}
+
+main {
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr 400px 1fr;
+    height: 600px;
+}
+
+header {
+    text-align: center;
+}
+
+button {
+    cursor: pointer;
+}
+
+.game-screen {
+    margin-top: 30px;
+}
+
+.instructions, .game-over {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 50%;
+    right: 50%;
+    transform: translate(50%, -50%);
+    background-color: blue;
+    border-radius: 12px;
+}
+
+.hidden {
+    visibility: hidden;
+}
+
+#left,
+#right {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
