@@ -76,7 +76,8 @@ function detectHit(user, platform) {
 ```
 
 In the real world, an object's vertical velocity is applied a constant acceleration due to gravity. This game emulates that by adding a `gravity` constant to the user's speed each time the game loop is iterated - every 22 milliseconds. Once the user is falling down, any overlap between the user's and platforms' position will result in the user's vertical speed to change to a set value. `gravity` will affect this value immediately, resulting in a smoother vertical motion.
-    * It's important to note that the game's frame of reference considers down and right to be positive
+
+*It's important to note that the game's frame of reference considers down and right to be positive*
 
 
 ### PLAYER MOVEMENT
