@@ -2,9 +2,7 @@ let testPlayer = new Player(15,15,30,30);
 let testPlatform = new Platform(15,30);
 
 
-describe('class Player', function() {
-    let testPlayer = new Player(15,15,30,30);
-    
+describe('class Player', function() {    
     it('should return a number for x', function() {
         expect(typeof(testPlayer.x)).toBe('number');
     });
