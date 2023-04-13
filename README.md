@@ -22,7 +22,7 @@ To play online, please visit https://mountainclimber.netlify.app/
 
 * Be careful! Once you start moving, you won't be able to sit still!
 
-If the player touches the water below, the game is over.
+* If the player touches the water below, the game is over.
 
 ---
 
