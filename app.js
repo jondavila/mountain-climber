@@ -144,7 +144,6 @@ function movementHandler(e) {
 
 //================================= HIT DETECTION ===============================//
 // This mainly handles vertical motion
-// TODO: find better values to reduce choppiness ================================================ //
 function detectHit(user, platform) {
     // we only want to detect hits from above, as we want the users to pass through plaforms from below
 
@@ -259,18 +258,4 @@ function scoreKeeper() {
 /*
 BE SURE TO CLEAN AND ORGANIZE CODE BEFORE SUBMITTING
 
-if the player moves up in y, the platforms move down in y (opposite of this since down is positive in this frame of reference)
-
-gravity (or rather the change in y due to gravity) is constant except when bouncing. dy should change to a negative when bounced, and gradually change back to gravity
-    - thinking maybe a while function could work here
-        - delay in a while function?? -> set timeout
-    - we could have a setInterval function to check dy value
-        - if not gravity, add .5 for instance
-        - clearInterval when value is reached 
-
-score should be tied to movement of platforms, not user, since user can bounce on the same platform
-
-if user.dx is not greater than 0 (moving down), make that the platform.dx
-
-NOTE AS OF 4/11 = SCORE BROKEN
  */

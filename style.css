@@ -17,7 +17,7 @@ main {
     display: grid;
     grid-template-rows: 1fr;
     grid-template-columns: 1fr 450px 1fr;
-    height: 600px;
+    /* height: 600px; */
 }
 
 header {
