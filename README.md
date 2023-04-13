@@ -101,7 +101,7 @@ function positionUpdate() {
 Once a user's input is detected, the square's horizontal velocity is changed to reflect the desired motion. The initial velocity is 0 by default so that the user may choose their starting direction.
 
 
-### PLATFROM GENERATION
+### PLATFORM GENERATION
 ```javascript
 class Platform {
     constructor(x, y) {
