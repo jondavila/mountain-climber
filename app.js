@@ -210,7 +210,7 @@ function playerLost() {
         if(roundedScore > highScoreNum) {
             highScore.textContent = `High Score: ${roundedScore}`;
             highScoreNum = roundedScore;
-            newHighScore.textContent = 'NEW HIGH SCORE!!';
+            newHighScore.textContent = 'NEW HIGH SCORE!';
             gameOver.insertBefore(newHighScore,resetButton);
         }
     }
