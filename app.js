@@ -3,6 +3,7 @@ const game = document.querySelector('#game');
 const ctx = game.getContext('2d');
 const score = document.querySelector('#score');
 const highScore = document.querySelector('#high-score');
+const newHighScore = document.createElement('h3');
 const playButton = document.querySelector('#play');
 const resetButton = document.querySelector('#reset');
 const instructions = document.querySelector('.instructions');
@@ -209,6 +210,8 @@ function playerLost() {
         if(roundedScore > highScoreNum) {
             highScore.textContent = `High Score: ${roundedScore}`;
             highScoreNum = roundedScore;
+            newHighScore.textContent = 'NEW HIGH SCORE!!';
+            gameOver.insertBefore(newHighScore,resetButton);
         }
     }
 }
@@ -223,6 +226,7 @@ resetButton.addEventListener('click', function() {
     score.textContent = 'Score: 0'
 
     gameOver.classList.toggle('hidden');
+    newHighScore.remove();
 })
 
 //=================================== PLAYER LOST ====================================================// 
