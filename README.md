@@ -152,5 +152,5 @@ While not a feature that impacts gameplay, I'd like to change the cosmetic to ha
 
 ---
 
-## WHITEBOARD
+## WIREFRAME
 ![whiteboard](/images/whiteboard.png)
