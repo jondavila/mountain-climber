@@ -9,8 +9,8 @@ const resetButton = document.querySelector('#reset');
 const instructions = document.querySelector('.instructions');
 const gameOver = document.querySelector('.game-over');
 const gameOverText = document.querySelector('#game-over-text');
+const gravity = 0.62; // higher number leads to stronger 'gravity'
 
-const gravity = 0.62; // (acceleration) higher number leads to stronger 'gravity'
 let platforms = [];
 let user;
 let startingPlatform;
@@ -42,7 +42,7 @@ class Player {
         this.alive = true;
 
         this.render = () => {
-            ctx.fillStyle = 'black'; // player sprite will go here using .drawImage() => no need for .fillStyle or .fillRect
+            // ctx.fillStyle = 'black'; // player sprite will go here using .drawImage() => no need for .fillStyle or .fillRect
             ctx.fillRect(this.x, this.y, this.width, this.height);
         }
     }
@@ -69,11 +69,11 @@ class Platform {
 
 //============================= EVENT LISTENERS ===============================//
 window.addEventListener('DOMContentLoaded', function () {
-    // starting position
+    // starting position and platfrom
     user = new Player((game.width / 2), (game.height - 70), 20, 20);
     startingPlatforms(user);
 
-    // run the game loop
+    // run the game loop after play is clicked
     playButton.addEventListener('click', ()=> {
         let runGame = setInterval(gameLoop, 22);
         instructions.classList.toggle('hidden');
@@ -81,6 +81,22 @@ window.addEventListener('DOMContentLoaded', function () {
 });
 
 document.addEventListener('keydown', movementHandler);
+
+resetButton.addEventListener('click', function() {
+    // removes existing platfroms and creates a new player
+    platforms = [];
+    user = new Player((game.width / 2), (game.height - 70), 20, 20);
+    startingPlatforms(user);
+
+    // resets scores for next game
+    scoreNum = 0;
+    roundedScore = 0;
+    score.textContent = 'Score: 0'
+
+    // hides game over box and deletes new high score alert
+    gameOver.classList.toggle('hidden');
+    newHighScore.remove();
+})
 //============================= EVENT LISTENERS ===============================//
 
 
@@ -88,9 +104,10 @@ document.addEventListener('keydown', movementHandler);
 
 //=============================== GAME PROCESSES ===============================//
 function gameLoop() {
+    // checks losing condition each time gameLoop() is ran
     playerLost();
-    if (user.alive) {
 
+    if (user.alive) {
         ctx.clearRect(0, 0, game.width, game.height);
         positionUpdate();
 
@@ -107,6 +124,7 @@ function gameLoop() {
             }
 
             // if the platform is below game height, the platform is deleted to save space
+            // remove platform from array to lessen platforms.length (see generateNewPlatforms())
             if (platform.y > (game.height)) {
                 let platformIndex = platforms.indexOf(platform)
                 platforms.splice(platformIndex, 1);
@@ -115,8 +133,6 @@ function gameLoop() {
             if (platform.dy !== 0) {
                 scoreKeeper();
             }
-
-
         })
 
         generateNewPlatforms();
@@ -147,7 +163,6 @@ function movementHandler(e) {
 // This mainly handles vertical motion
 function detectHit(user, platform) {
     // we only want to detect hits from above, as we want the users to pass through plaforms from below
-
     let hitTest = (
         user.y + user.height > platform.y &&
         user.y < platform.y + platform.height &&
@@ -165,16 +180,19 @@ function detectHit(user, platform) {
 
 //=================================== PLATFORM GENERATING ============================================//
 function createPlatforms(y) {
+    // we want the platforms to be randomly placed along the width of the game
     let randX = Math.floor(Math.random() * (game.width - 40));
     let plat = new Platform(randX, y);
     platforms.push(plat);
 }
 
+// create initial platforms that exist inside of the canvas window
 function startingPlatforms(user) {
     let randX = Math.floor(Math.random() * (game.width - 40));
     // starting platform should be placed under player to avoid instant loss
     startingPlatform = new Platform((user.x - 5), (user.y + 30));
     platforms.push(startingPlatform);
+
     createPlatforms(user.y - 30);
     createPlatforms(user.y - 90);
     createPlatforms(user.y - 150);
@@ -191,6 +209,7 @@ function startingPlatforms(user) {
 
 }
 
+// creates a new platform as one leaves the canvas
 function generateNewPlatforms() {
     let onScreen = platforms.length;
     if (onScreen < 12) {
@@ -203,6 +222,7 @@ function generateNewPlatforms() {
 
 //=================================== PLAYER LOST ====================================================//
 function playerLost() {
+    // losing condition
     if (user.y > game.height) {
         user.alive = false
         gameOverText.textContent = `Game Over - Score: ${roundedScore}`;
@@ -216,18 +236,6 @@ function playerLost() {
     }
 }
 
-resetButton.addEventListener('click', function() {
-    platforms = [];
-    user = new Player((game.width / 2), (game.height - 70), 20, 20);
-    startingPlatforms(user);
-
-    scoreNum = 0;
-    roundedScore = 0;
-    score.textContent = 'Score: 0'
-
-    gameOver.classList.toggle('hidden');
-    newHighScore.remove();
-})
 
 //=================================== PLAYER LOST ====================================================// 
 
@@ -251,15 +259,8 @@ function horizontalLoop() {
 }
 
 function scoreKeeper() {
-    scoreNum += 0.2;
+    scoreNum += 0.2; // less than 1 to not have an inflated score
     roundedScore = Math.floor(scoreNum)
     score.textContent = `Score: ${roundedScore}`
 }
 //================================= HELPER FUNCTIONS ===============================================//
-
-
-// =============================== NOTES ================================================ //
-/*
-BE SURE TO CLEAN AND ORGANIZE CODE BEFORE SUBMITTING
-
- */
