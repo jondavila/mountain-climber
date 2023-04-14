@@ -10,7 +10,7 @@ To play online, please visit https://mountainclimber.netlify.app/
 
 * HTML5
 * CSS
-* Javascript
+* JavaScript
 
 ---
 
