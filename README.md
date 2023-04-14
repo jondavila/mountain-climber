@@ -8,7 +8,7 @@ To play online, please visit https://mountainclimber.netlify.app/
 
 ## TECHNOLOGIES USED
 
-* HTML5
+* HTML
 * CSS
 * JavaScript
 
