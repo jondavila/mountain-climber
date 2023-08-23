@@ -12,11 +12,13 @@ const resetButton = document.querySelector('#reset');
 const instructions = document.querySelector('.instructions');
 const gameOver = document.querySelector('.game-over');
 const gameOverText = document.querySelector('#game-over-text');
-let gravity = 0.62; // higher number leads to stronger 'gravity'
 
+
+let gravity = 0.62; // higher number leads to stronger 'gravity'
 let platforms = [];
 let user;
 let startingPlatform;
+let doubleJump = false;
 let scoreNum = 0;
 let roundedScore = 0;
 let highScoreNum = 0;
@@ -131,6 +133,11 @@ document.addEventListener('keydown', function(e) {
         // hides game over box and deletes new high score alert
         gameOver.classList.add('hidden');
         newHighScore.remove();
+    }else if(e.code === 'Space') {
+        if (doubleJump) {
+            user.dy = -8;
+            doubleJump = false;
+        }
     }
 });
 
@@ -210,6 +217,7 @@ function detectHit(user, platform) {
 
     if (hitTest) {
         user.dy = -12
+        doubleJump = true;
     }
 }
 //================================= HIT DETECTION ===================================================//
