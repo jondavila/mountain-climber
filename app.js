@@ -7,6 +7,7 @@ const newHighScore = document.createElement('h3');
 const playButton = document.querySelector('#play');
 const easyButton = document.querySelector('#easy');
 const mediumButton = document.querySelector('#medium');
+const titleText = document.getElementsByTagName('h1')[0];
 const hardButton = document.querySelector('#hard');
 const resetButton = document.querySelector('#reset');
 const instructions = document.querySelector('.instructions');
@@ -82,6 +83,7 @@ window.addEventListener('DOMContentLoaded', function () {
     easyButton.addEventListener('click', ()=> {
         let runGame = setInterval(gameLoop, 22);
         gravity = 0.52;
+        titleText.textContent = 'Mountain Climber - Easy';
         instructions.classList.toggle('hidden');
     });
 
@@ -89,6 +91,7 @@ window.addEventListener('DOMContentLoaded', function () {
     mediumButton.addEventListener('click', ()=> {
         let runGame = setInterval(gameLoop, 22);
         gravity = 0.62;
+        titleText.textContent = 'Mountain Climber - Medium';
         instructions.classList.toggle('hidden');
     });
 
@@ -96,6 +99,7 @@ window.addEventListener('DOMContentLoaded', function () {
     hardButton.addEventListener('click', ()=> {
         let runGame = setInterval(gameLoop, 22);
         gravity = 0.73;
+        titleText.textContent = 'Mountain Climber - Hard';
         instructions.classList.toggle('hidden');
     });
 });
