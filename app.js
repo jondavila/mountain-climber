@@ -5,11 +5,14 @@ const score = document.querySelector('#score');
 const highScore = document.querySelector('#high-score');
 const newHighScore = document.createElement('h3');
 const playButton = document.querySelector('#play');
+const easyButton = document.querySelector('#easy');
+const mediumButton = document.querySelector('#medium');
+const hardButton = document.querySelector('#hard');
 const resetButton = document.querySelector('#reset');
 const instructions = document.querySelector('.instructions');
 const gameOver = document.querySelector('.game-over');
 const gameOverText = document.querySelector('#game-over-text');
-const gravity = 0.62; // higher number leads to stronger 'gravity'
+let gravity = 0.62; // higher number leads to stronger 'gravity'
 
 let platforms = [];
 let user;
@@ -73,9 +76,24 @@ window.addEventListener('DOMContentLoaded', function () {
     user = new Player((game.width / 2), (game.height - 70), 20, 20);
     startingPlatforms(user);
 
-    // run the game loop after play is clicked
-    playButton.addEventListener('click', ()=> {
+    // run the game loop after easy is clicked
+    easyButton.addEventListener('click', ()=> {
         let runGame = setInterval(gameLoop, 22);
+        gravity = 0.52;
+        instructions.classList.toggle('hidden');
+    });
+
+    // run the game loop after medium is clicked
+    mediumButton.addEventListener('click', ()=> {
+        let runGame = setInterval(gameLoop, 22);
+        gravity = 0.62;
+        instructions.classList.toggle('hidden');
+    });
+
+    // run the game loop after hard is clicked
+    hardButton.addEventListener('click', ()=> {
+        let runGame = setInterval(gameLoop, 22);
+        gravity = 0.73;
         instructions.classList.toggle('hidden');
     });
 });
