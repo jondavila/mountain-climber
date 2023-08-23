@@ -96,7 +96,26 @@ resetButton.addEventListener('click', function() {
     // hides game over box and deletes new high score alert
     gameOver.classList.toggle('hidden');
     newHighScore.remove();
-})
+});
+
+document.addEventListener('keydown', function(e) {
+    if(e.code === 'KeyR') {
+        // removes existing platfroms and creates a new player
+        platforms = [];
+        user = new Player((game.width / 2), (game.height - 70), 20, 20);
+        startingPlatforms(user);
+
+        // resets scores for next game
+        scoreNum = 0;
+        roundedScore = 0;
+        score.textContent = 'Score: 0'
+
+        // hides game over box and deletes new high score alert
+        gameOver.classList.add('hidden');
+        newHighScore.remove();
+    }
+});
+
 //============================= EVENT LISTENERS ===============================//
 
 
@@ -233,6 +252,7 @@ function playerLost() {
             newHighScore.textContent = 'NEW HIGH SCORE!';
             gameOver.insertBefore(newHighScore,resetButton);
         }
+
     }
 }
 
